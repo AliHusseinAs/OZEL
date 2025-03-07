@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Test</title>
+</head>
+<body>
+    <h2>Test API</h2>
+    <input type="text" id="userName" placeholder="Username"><br>
+    <input type="password" id="password" placeholder="Password"><br>
+    <input type="email" id="mail" placeholder="Email"><br>
+    <input type="text" id="isim" placeholder="isim"><br>
+    <input type="text" id="soyisim" placeholder="soy"><br>
+    <input type="text" id="telefon" placeholder="tel"><br>
+    <button onclick="sendData()">Send</button>
+    <p id="response"></p>
+    
+    <script>
+        async function sendData() {
+            const username = document.getElementById('userName').value;
+            const password = document.getElementById('password').value;
+            const email = document.getElementById('mail').value;
+            const isim = document.getElementById('isim').value;
+            const soy = document.getElementById('soyisim').value;
+            const tel = document.getElementById('telefon').value;
+    
+            const data = {
+                userName: username, // Backend expects "user_name"
+                password: password,
+                mail: email,         // Backend expects "mail"
+                isim: isim,
+                soyisim: soy,        // Backend expects "soyisim"
+                telefon: tel         // Backend expects "telefon"
+            };
+    
+            console.log("Sending data:", data); // Debugging: Verify payload
+    
+            try {
+                const response = await fetch('http://localhost:4015/api/public/addUsers', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+    
+                if (!response.ok) {
+                    throw new Error(`Server error ${response.status}`);
+                }
+    
+                const result = await response.json();
+                //document.getElementById('response').innerText = JSON.stringify(result, null, 2);
+            } catch (error) {
+                //document.getElementById('response').innerText = 'Error: ' + error.message;
+            }
+        }
+    </script>
+</body>
+</html>
